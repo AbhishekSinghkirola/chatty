@@ -1,0 +1,34 @@
+import axiosInstance from "./apiService";
+
+export const getAllAvailableUsersService = async () => {
+  const response = await axiosInstance.get("/chat-app/chats/users");
+  return response.data;
+};
+
+export const getLoggedInUserAssociatedChatService = async () => {
+  const response = await axiosInstance.get("/chat-app/chats");
+  return response.data;
+};
+
+export const initiateOneOnOneChatService = async (receiverId) => {
+  const response = await axiosInstance.post(`/chat-app/chats/c/${receiverId}`);
+  return response.data;
+};
+
+export const getAllMessagesService = async (chatId) => {
+  const response = await axiosInstance.get(`/chat-app/messages/${chatId}`);
+  return response.data;
+};
+
+export const sendMessageService = async (chatId, payload) => {
+  const response = await axiosInstance.post(
+    `/chat-app/messages/${chatId}`,
+    payload,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+  return response.data;
+};
