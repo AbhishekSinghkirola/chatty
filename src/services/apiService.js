@@ -6,7 +6,6 @@ const axiosInstance = axios.create({
   // withCredentials: true, // ✅ keep cookie support
 });
 
-// Attach accessToken (if available in store)
 axiosInstance.interceptors.request.use(
   (config) => {
     const { accessToken } = useAuthStore.getState();
@@ -18,9 +17,6 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// --------------------
-// Refresh token logic
-// --------------------
 let isRefreshing = false;
 let failedQueue = [];
 
@@ -41,7 +37,6 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config;
     const { refreshToken, setTokens, clearAuth } = useAuthStore.getState();
 
-    // Handle 401
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
@@ -69,7 +64,6 @@ axiosInstance.interceptors.response.use(
         let newAccessToken;
 
         if (refreshToken) {
-          // ✅ refresh with refreshToken from store
           const { data } = await axios.post(
             `${
               import.meta.env.VITE_API_BASE_URL ||
@@ -82,7 +76,6 @@ axiosInstance.interceptors.response.use(
           newAccessToken = data?.accessToken;
           setTokens(newAccessToken, data?.refreshToken || refreshToken);
         } else {
-          // ✅ refresh with cookies (backend handles it)
           const { data } = await axiosInstance.post("/users/refresh-token");
           newAccessToken = data?.accessToken;
           setTokens(newAccessToken, data?.refreshToken || null);
@@ -96,7 +89,7 @@ axiosInstance.interceptors.response.use(
       } catch (err) {
         processQueue(err, null);
         isRefreshing = false;
-        clearAuth(); // logout if refresh fails
+        clearAuth();
         return Promise.reject(err);
       }
     }

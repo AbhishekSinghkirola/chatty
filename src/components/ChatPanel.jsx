@@ -1,5 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { File, Paperclip, SendHorizonal, X } from "lucide-react";
+import {
+  ArrowDownToLine,
+  File,
+  Paperclip,
+  SendHorizonal,
+  X,
+} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import useChatStore from "../store/useChatStore";
 import { STOP_TYPING_EVENT, TYPING_EVENT } from "../utils/constants";
@@ -10,18 +16,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import MarkdownRenderer from "./MarkdownRenderer";
 import { Card, CardContent } from "@/components/ui/card";
-
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  PopoverAnchor,
-} from "@/components/ui/popover";
 import { formatFileSize, getFileExtension } from "../utils/file";
 import { toast } from "sonner";
+import useAuthStore from "../store/useAuthStore";
 
 const ChatPanel = ({ activeUser }) => {
   const [message, setMessage] = useState("");
+  const { user } = useAuthStore();
   const { sendMessage, selectedUserChats, selectedUser } = useChatStore();
   const { socket } = useSockeStore();
 
@@ -115,7 +116,6 @@ const ChatPanel = ({ activeUser }) => {
       toast.error("You can only upload upto 5 files at a time.");
       return;
     }
-    
 
     setFiles((prev) => [...prev, ...selectedFiles]);
     e.target.value = "";
@@ -123,6 +123,20 @@ const ChatPanel = ({ activeUser }) => {
 
   const handleRemoveFile = (fileId) => {
     setFiles((prev) => prev.filter((_, index) => index !== fileId));
+  };
+
+  const handleDownload = async (url, filename) => {
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    } catch (err) {
+      console.error("Download failed:", err);
+    }
   };
 
   return (
@@ -147,12 +161,48 @@ const ChatPanel = ({ activeUser }) => {
         <ul className="pr-3">
           {selectedUserChats?.sort(sortByDate)?.map((chat, i) => (
             <li key={i}>
+              {chat?.attachments?.length
+                ? chat?.attachments.map((attachment, attachmentKey) => (
+                    <Card
+                      className={`min-w-[250px] w-fit shrink-0 whitespace-nowrap px-4 py-2 mt-3 rounded-sm ${
+                        user?._id === chat?.sender?._id ? "ml-auto" : ""
+                      }`}
+                      key={attachmentKey}
+                    >
+                      <CardContent className="p-0 flex justify-between items-center">
+                        <div className="flex items-center gap-3 pr-4 w-full">
+                          <File />
+                          <div className="flex flex-col w-full">
+                            <p className="truncate">
+                              {attachment?.localPath?.split("/").pop() ||
+                                "file"}
+                            </p>
+                            <small className="dark:text-gray-300 truncate">
+                              {getFileExtension(
+                                attachment?.localPath?.split("/").pop() ?? ""
+                              )}
+                            </small>
+                          </div>
+                        </div>
+                        <ArrowDownToLine
+                          className="cursor-pointer"
+                          onClick={() =>
+                            handleDownload(
+                              attachment?.url ?? "",
+                              attachment?.localPath?.split("/").pop() ?? "file"
+                            )
+                          }
+                        />
+                      </CardContent>
+                    </Card>
+                  ))
+                : ""}
               <div
                 className={`${
-                  selectedUser?.admin === chat?.sender?._id
+                  user?._id === chat?.sender?._id
                     ? "bg-background text-foreground ml-auto"
                     : "bg-foreground text-background"
-                } max-w-[300px] rounded-md  p-3 mt-3 whitespace-pre-line`}
+                } w-fit max-w-[300px] rounded-md  p-3 mt-3 whitespace-pre-line`}
               >
                 <MarkdownRenderer
                   content={chat?.content || "No content available"}
@@ -166,7 +216,6 @@ const ChatPanel = ({ activeUser }) => {
       </div>
       <div className="flex gap-3 overflow-x-auto scrollbar-custom pb-1">
         {files?.map((file, index) => {
-          console.log(file);
           return (
             <Card
               className="min-w-[250px] w-auto shrink-0 whitespace-nowrap px-4 py-2 rounded-sm"
