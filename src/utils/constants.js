@@ -8,3 +8,5 @@ export const MESSAGE_RECEIVED_EVENT = "messageReceived";
 export const LEAVE_CHAT_EVENT = "leaveChat";
 export const UPDATE_GROUP_NAME_EVENT = "updateGroupName";
 export const MESSAGE_DELETE_EVENT = "messageDeleted";
+
+export const STOP_TYPING_TIMER = 3 * 1000; // milliseconds

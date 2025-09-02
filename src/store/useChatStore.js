@@ -18,6 +18,7 @@ const useChatStore = create((set, get) => ({
   loggedInChats: null,
   selectedUser: null,
   selectedUserChats: null,
+  activeUser: null,
 
   getAvailableUsers: async () => {
     const { loading } = get();
@@ -29,7 +30,7 @@ const useChatStore = create((set, get) => ({
 
       const response = await getAllAvailableUsersService();
 
-      if (response.success) {
+      if (response?.success) {
         set({
           error: null,
           loading: false,
@@ -73,7 +74,7 @@ const useChatStore = create((set, get) => ({
     }
   },
 
-  initiateOneOnOneChat: async (receiverId) => {
+  initiateOneOnOneChat: async (receiver) => {
     const { loading } = get();
 
     if (loading) return;
@@ -81,7 +82,7 @@ const useChatStore = create((set, get) => ({
     try {
       set({ loading: true, error: null, success: null });
 
-      const response = await initiateOneOnOneChatService(receiverId);
+      const response = await initiateOneOnOneChatService(receiver?._id);
 
       if (response.success) {
         set({
@@ -89,6 +90,7 @@ const useChatStore = create((set, get) => ({
           loading: false,
           success: response?.message ?? "Success",
           selectedUser: response?.data ?? [],
+          activeUser: receiver,
         });
       }
     } catch (error) {
@@ -153,6 +155,11 @@ const useChatStore = create((set, get) => ({
       });
     }
   },
+
+  appendMessage: (message) =>
+    set((state) => ({
+      selectedUserChats: [...state.selectedUserChats, message],
+    })),
 }));
 
 export default useChatStore;
