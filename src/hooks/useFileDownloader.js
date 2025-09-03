@@ -1,7 +1,7 @@
-// src/hooks/useFileDownloader.js
 const useFileDownloader = () => {
   const downloadFile = async (url, filename) => {
     try {
+      console.log(url, filename);
       const response = await fetch(url);
       if (!response.ok) throw new Error("Network response was not ok");
 

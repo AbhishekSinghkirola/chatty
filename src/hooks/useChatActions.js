@@ -8,7 +8,9 @@ export default function useChatActions() {
   const { socket } = useSocketStore();
 
   const startOneOnOneChat = async (receiver) => {
-    const { success, error } = await initiateOneOnOneChat(receiver);
+    await initiateOneOnOneChat(receiver);
+
+    const { success, error } = useChatStore.getState();
 
     if (selectedUser?._id) {
       socket.emit(JOIN_CHAT_EVENT, selectedUser._id);

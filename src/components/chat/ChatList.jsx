@@ -22,7 +22,7 @@ const ChatList = () => {
     <div className="flex-1 overflow-y-scroll scrollbar-custom">
       <ul role="list" className="pr-3">
         {sortedChats.map((chat) => (
-          <li key={chat.id || chat._id} role="listitem">
+          <li key={chat._id} role="listitem">
             <ChatArea chat={chat} />
           </li>
         ))}

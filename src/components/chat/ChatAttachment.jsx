@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowDownToLine, File } from "lucide-react";
-import { formatFileSize, getFileExtension } from "../../utils/file";
+import { getFileExtension } from "../../utils/file";
 
 const ChatAttachment = ({ attachment, className, onClick }) => {
   return (
@@ -16,9 +16,6 @@ const ChatAttachment = ({ attachment, className, onClick }) => {
             </p>
             <small className="dark:text-gray-300 truncate">
               {getFileExtension(attachment?.localPath?.split("/").pop() ?? "")}
-            </small>
-            <small className="dark:text-gray-300">
-              {formatFileSize(attachment?.size ?? 0)}
             </small>
           </div>
         </div>

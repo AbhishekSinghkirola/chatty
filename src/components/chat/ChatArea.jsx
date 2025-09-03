@@ -10,13 +10,13 @@ const ChatArea = ({ chat }) => {
   const isCurrentUser = user?._id === chat?.sender?._id;
 
   return (
-    <li className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2">
       {chat?.attachments?.map((attachment, i) => (
         <ChatAttachment
           key={i}
           className={isCurrentUser ? "ml-auto" : ""}
           attachment={attachment}
-          onclick={() =>
+          onClick={() =>
             downloadFile(
               attachment?.url ?? "",
               attachment?.localPath?.split("/").pop() ?? "file"
@@ -35,7 +35,7 @@ const ChatArea = ({ chat }) => {
           content={chat.content}
         />
       )}
-    </li>
+    </div>
   );
 };
 
