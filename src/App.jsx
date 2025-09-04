@@ -22,7 +22,7 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import useSockeStore from "./store/useSocketStore";
 
 const App = () => {
-  const { getLoggedInUser } = useAuthStore();
+  const { getLoggedInUser, user } = useAuthStore();
   const { initSocket, cleanupSocket } = useSockeStore();
 
   useEffect(() => {
@@ -30,12 +30,13 @@ const App = () => {
   }, [getLoggedInUser]);
 
   useEffect(() => {
-    initSocket();
-
+    if (user) {
+      initSocket();
+    }
     return () => {
       cleanupSocket();
     };
-  }, [initSocket, cleanupSocket]);
+  }, [user, initSocket, cleanupSocket]);
 
   return (
     <>

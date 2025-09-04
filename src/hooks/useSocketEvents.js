@@ -8,6 +8,8 @@ export default function useSocketEvents() {
   const { appendMessage } = useChatStore();
 
   useEffect(() => {
+    if (!socket) return;
+
     const handleMessageReceived = (message) => {
       appendMessage(message);
     };
