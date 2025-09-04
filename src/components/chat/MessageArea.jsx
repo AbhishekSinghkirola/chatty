@@ -11,7 +11,7 @@ const MessageArea = ({
 }) => {
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault(); // prevent newline
+      e.preventDefault();
       handleSendMessage();
     }
   };
@@ -41,11 +41,7 @@ const MessageArea = ({
       />
 
       <button
-        className={`flex justify-center items-center p-2 rounded-full transition ${
-          canSend
-            ? "bg-black hover:bg-gray-800"
-            : "bg-gray-400 cursor-not-allowed"
-        }`}
+        className={`flex justify-center items-center p-3 rounded-full transition bg-black hover:bg-gray-800 w-[43px] h-[43px] cursor-pointer `}
         onClick={canSend ? handleSendMessage : undefined}
         disabled={!canSend}
         aria-label="Send message"

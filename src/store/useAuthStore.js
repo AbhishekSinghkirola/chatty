@@ -125,7 +125,12 @@ const useAuthStore = create((set, get) => ({
           loading: false,
           success: response?.message ?? "Success",
           user: null,
+          accessToken: null,
+          refreshToken: null,
         });
+
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
       }
     } catch (error) {
       const errorMessage = getAxiosErrorMessage(error);

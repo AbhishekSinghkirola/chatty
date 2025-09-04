@@ -36,11 +36,8 @@ const MainLayout = () => {
               <Button>Login </Button>
             </Link>
           ) : (
-            <Button>
-              <span className={`${loading && "hidden"}`} onClick={handleLogout}>
-                {" "}
-                Logout
-              </span>
+            <Button className={`${loading && "hidden"}`} onClick={handleLogout}>
+              Logout
               <Loader2
                 className={`w-12 h-12 animate-spin ${!loading && "hidden"}`}
               />
