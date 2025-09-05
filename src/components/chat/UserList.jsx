@@ -7,7 +7,7 @@ import useChatActions from "../../hooks/useChatActions";
 const UserList = () => {
   const { availableUsers } = useChatStore();
   const { startOneOnOneChat } = useChatActions();
-
+console.log(availableUsers)
   return (
     <section className="w-[25%] h-full flex flex-col min-h-0">
       <div className="flex-1 overflow-y-scroll scrollbar-custom">

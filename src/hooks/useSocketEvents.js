@@ -5,13 +5,15 @@ import { MESSAGE_RECEIVED_EVENT } from "../utils/constants";
 
 export default function useSocketEvents() {
   const { socket } = useSocketStore();
-  const { appendMessage } = useChatStore();
+  const { appendMessage, updateAvailableUsers } = useChatStore();
 
   useEffect(() => {
     if (!socket) return;
 
     const handleMessageReceived = (message) => {
       appendMessage(message);
+
+      updateAvailableUsers(message.sender);
     };
 
     socket.on(MESSAGE_RECEIVED_EVENT, handleMessageReceived);
@@ -19,5 +21,5 @@ export default function useSocketEvents() {
     return () => {
       socket.off(MESSAGE_RECEIVED_EVENT, handleMessageReceived);
     };
-  }, [socket, appendMessage]);
+  }, [socket, appendMessage, updateAvailableUsers]);
 }

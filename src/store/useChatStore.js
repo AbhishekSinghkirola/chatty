@@ -17,7 +17,7 @@ const useChatStore = create((set, get) => ({
   availableUsers: null,
   loggedInChats: null,
   selectedUser: null,
-  selectedUserChats: null,
+  selectedUserChats: [],
   activeUser: null,
 
   getAvailableUsers: async () => {
@@ -160,6 +160,13 @@ const useChatStore = create((set, get) => ({
     set((state) => ({
       selectedUserChats: [...state.selectedUserChats, message],
     })),
+
+  updateAvailableUsers: (user) => {
+    const { availableUsers } = get();
+    if (!availableUsers.find((u) => u._id === user._id)) {
+      set({ availableUsers: [user, ...availableUsers] });
+    }
+  },
 }));
 
 export default useChatStore;
