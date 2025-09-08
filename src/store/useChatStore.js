@@ -2,6 +2,7 @@ import { create } from "zustand";
 
 import { getAxiosErrorMessage } from "../utils/errorHandling";
 import {
+  deleteMessageService,
   getAllAvailableUsersService,
   getAllMessagesService,
   getLoggedInUserAssociatedChatService,
@@ -165,6 +166,35 @@ const useChatStore = create((set, get) => ({
     const { availableUsers } = get();
     if (!availableUsers.find((u) => u._id === user._id)) {
       set({ availableUsers: [user, ...availableUsers] });
+    }
+  },
+
+  deleteMessage: async (messageId) => {
+    const { loading, selectedUser } = get();
+
+    if (loading) return;
+
+    try {
+      set({ loading: true, error: null, success: null });
+
+      const response = await deleteMessageService(selectedUser?._id, messageId);
+
+      if (response.success) {
+        set((state) => ({
+          error: null,
+          loading: false,
+          success: response?.message ?? "Success",
+          selectedUserChats: state.selectedUserChats.filter(
+            (chat) => chat?._id !== messageId
+          ),
+        }));
+      }
+    } catch (error) {
+      const errorMessage = getAxiosErrorMessage(error);
+      set({
+        error: errorMessage ?? "Something went wrong!!",
+        loading: false,
+      });
     }
   },
 }));

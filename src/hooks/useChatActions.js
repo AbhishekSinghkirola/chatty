@@ -4,7 +4,7 @@ import useSocketStore from "../store/useSocketStore";
 import { JOIN_CHAT_EVENT } from "../utils/constants";
 
 export default function useChatActions() {
-  const { initiateOneOnOneChat, selectedUser } = useChatStore();
+  const { initiateOneOnOneChat, selectedUser, deleteMessage } = useChatStore();
   const { socket } = useSocketStore();
 
   const startOneOnOneChat = async (receiver) => {
@@ -25,5 +25,21 @@ export default function useChatActions() {
     }
   };
 
-  return { startOneOnOneChat };
+  const handleDeleteChatMessage = async (messageId) => {
+    if (!messageId) return;
+
+    await deleteMessage(messageId);
+    
+    const { success, error } = useChatStore.getState();
+
+    if (success) {
+      toast.success(success);
+    }
+
+    if (error) {
+      toast.error(error);
+    }
+  };
+
+  return { startOneOnOneChat, handleDeleteChatMessage };
 }

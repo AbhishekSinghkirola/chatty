@@ -1,6 +1,7 @@
 import { useEffect, useRef, useMemo } from "react";
 import useChatStore from "../../store/useChatStore";
 import ChatArea from "./ChatArea";
+import useChatActions from "../../hooks/useChatActions";
 
 const ChatList = () => {
   const { selectedUserChats } = useChatStore();
@@ -18,12 +19,15 @@ const ChatList = () => {
     endOfMessagesRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [sortedChats]);
 
+  const { handleDeleteChatMessage } = useChatActions();
+
+
   return (
     <div className="flex-1 overflow-y-scroll scrollbar-custom">
       <ul role="list" className="pr-3">
         {sortedChats.map((chat) => (
           <li key={chat._id} role="listitem">
-            <ChatArea chat={chat} />
+            <ChatArea chat={chat} onDelete={handleDeleteChatMessage} />
           </li>
         ))}
         <div ref={endOfMessagesRef} />

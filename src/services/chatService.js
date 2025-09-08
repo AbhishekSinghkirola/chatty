@@ -32,3 +32,10 @@ export const sendMessageService = async (chatId, payload) => {
   );
   return response.data;
 };
+
+export const deleteMessageService = async (chatId, messageId) => {
+  const response = await axiosInstance.delete(
+    `/chat-app/messages/${chatId}/${messageId}`
+  );
+  return response.data;
+};
