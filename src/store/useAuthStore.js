@@ -10,6 +10,7 @@ import {
   resetPasswordService,
 } from "../services/authService";
 import { getAxiosErrorMessage } from "../utils/errorHandling";
+import useChatStore from "./useChatStore";
 
 const useAuthStore = create((set, get) => ({
   loading: false,
@@ -131,11 +132,14 @@ const useAuthStore = create((set, get) => ({
 
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
+
+        useChatStore.persist.clearStorage();
       }
     } catch (error) {
+      console.log(error);
       const errorMessage = getAxiosErrorMessage(error);
       set({
-        error: errorMessage ?? "Something went wrong!!",
+        error: errorMessage ?? "Something went wrong1!!",
         loading: false,
         authChecked: false,
         success: null,
