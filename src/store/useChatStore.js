@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 import { getAxiosErrorMessage } from "../utils/errorHandling";
 import {
@@ -10,193 +11,208 @@ import {
   sendMessageService,
 } from "../services/chatService";
 
-const useChatStore = create((set, get) => ({
-  loading: false,
-  chatsLoading: false,
-  error: null,
-  success: null,
-  availableUsers: null,
-  loggedInChats: null,
-  selectedUser: null,
-  selectedUserChats: [],
-  activeUser: null,
+const useChatStore = create(
+  persist(
+    (set, get) => ({
+      loading: false,
+      chatsLoading: false,
+      error: null,
+      success: null,
+      availableUsers: null,
+      loggedInChats: null,
+      selectedUser: null,
+      selectedUserChats: [],
+      activeUser: JSON.parse(localStorage.getItem("activeChatUser")) ?? null,
 
-  getAvailableUsers: async () => {
-    const { loading } = get();
+      getAvailableUsers: async () => {
+        const { loading } = get();
 
-    if (loading) return;
+        if (loading) return;
 
-    try {
-      set({ loading: true, error: null, success: null });
+        try {
+          set({ loading: true, error: null, success: null });
 
-      const response = await getAllAvailableUsersService();
+          const response = await getAllAvailableUsersService();
 
-      if (response?.success) {
-        set({
-          error: null,
-          loading: false,
-          success: response?.message ?? "Success",
-          availableUsers: response?.data ?? [],
-        });
-      }
-    } catch (error) {
-      const errorMessage = getAxiosErrorMessage(error);
-      set({
-        error: errorMessage ?? "Something went wrong!!",
-        loading: false,
-      });
-    }
-  },
+          if (response?.success) {
+            set({
+              error: null,
+              loading: false,
+              success: response?.message ?? "Success",
+              availableUsers: response?.data ?? [],
+            });
+          }
+        } catch (error) {
+          const errorMessage = getAxiosErrorMessage(error);
+          set({
+            error: errorMessage ?? "Something went wrong!!",
+            loading: false,
+          });
+        }
+      },
 
-  getLoggedInUserAssociatedChats: async () => {
-    const { chatsLoading } = get();
+      getLoggedInUserAssociatedChats: async () => {
+        const { chatsLoading } = get();
 
-    if (chatsLoading) return;
+        if (chatsLoading) return;
 
-    try {
-      set({ chatsLoading: true, error: null, success: null });
+        try {
+          set({ chatsLoading: true, error: null, success: null });
 
-      const response = await getLoggedInUserAssociatedChatService();
+          const response = await getLoggedInUserAssociatedChatService();
 
-      if (response.success) {
-        set({
-          error: null,
-          chatsLoading: false,
-          success: response?.message ?? "Success",
-          loggedInChats: response?.data ?? [],
-        });
-      }
-    } catch (error) {
-      const errorMessage = getAxiosErrorMessage(error);
-      set({
-        error: errorMessage ?? "Something went wrong!!",
-        chatsLoading: false,
-      });
-    }
-  },
+          if (response.success) {
+            set({
+              error: null,
+              chatsLoading: false,
+              success: response?.message ?? "Success",
+              loggedInChats: response?.data ?? [],
+            });
+          }
+        } catch (error) {
+          const errorMessage = getAxiosErrorMessage(error);
+          set({
+            error: errorMessage ?? "Something went wrong!!",
+            chatsLoading: false,
+          });
+        }
+      },
 
-  initiateOneOnOneChat: async (receiver) => {
-    const { loading } = get();
+      initiateOneOnOneChat: async (receiver) => {
+        const { loading } = get();
 
-    if (loading) return;
+        if (loading) return;
 
-    try {
-      set({ loading: true, error: null, success: null });
+        try {
+          set({ loading: true, error: null, success: null });
 
-      const response = await initiateOneOnOneChatService(receiver?._id);
+          const response = await initiateOneOnOneChatService(receiver?._id);
 
-      if (response.success) {
-        set({
-          error: null,
-          loading: false,
-          success: response?.message ?? "Success",
-          selectedUser: response?.data ?? [],
-          activeUser: receiver,
-        });
-      }
-    } catch (error) {
-      const errorMessage = getAxiosErrorMessage(error);
-      set({
-        error: errorMessage ?? "Something went wrong!!",
-        loading: false,
-      });
-    }
-  },
+          if (response.success) {
+            set({
+              error: null,
+              loading: false,
+              success: response?.message ?? "Success",
+              selectedUser: response?.data ?? [],
+              activeUser: receiver,
+            });
+          }
+        } catch (error) {
+          const errorMessage = getAxiosErrorMessage(error);
+          set({
+            error: errorMessage ?? "Something went wrong!!",
+            loading: false,
+          });
+        }
+      },
 
-  getAllMessages: async () => {
-    const { loading, selectedUser } = get();
+      getAllMessages: async () => {
+        const { loading, selectedUser } = get();
 
-    if (loading) return;
+        if (loading) return;
 
-    try {
-      set({ loading: true, error: null, success: null });
+        try {
+          set({ loading: true, error: null, success: null });
 
-      const response = await getAllMessagesService(selectedUser?._id);
+          const response = await getAllMessagesService(selectedUser?._id);
 
-      if (response.success) {
-        set({
-          error: null,
-          loading: false,
-          success: response?.message ?? "Success",
-          selectedUserChats: response?.data ?? [],
-        });
-      }
-    } catch (error) {
-      const errorMessage = getAxiosErrorMessage(error);
-      set({
-        error: errorMessage ?? "Something went wrong!!",
-        loading: false,
-      });
-    }
-  },
+          if (response.success) {
+            set({
+              error: null,
+              loading: false,
+              success: response?.message ?? "Success",
+              selectedUserChats: response?.data ?? [],
+            });
+          }
+        } catch (error) {
+          const errorMessage = getAxiosErrorMessage(error);
+          set({
+            error: errorMessage ?? "Something went wrong!!",
+            loading: false,
+          });
+        }
+      },
 
-  sendMessage: async (payload) => {
-    const { loading, selectedUser } = get();
+      sendMessage: async (payload) => {
+        const { loading, selectedUser } = get();
 
-    if (loading) return;
+        if (loading) return;
 
-    try {
-      set({ loading: true, error: null, success: null });
+        try {
+          set({ loading: true, error: null, success: null });
 
-      const response = await sendMessageService(selectedUser?._id, payload);
+          const response = await sendMessageService(selectedUser?._id, payload);
 
-      if (response.success) {
+          if (response.success) {
+            set((state) => ({
+              error: null,
+              loading: false,
+              success: response?.message ?? "Success",
+              selectedUserChats: [...state.selectedUserChats, response?.data],
+            }));
+          }
+        } catch (error) {
+          const errorMessage = getAxiosErrorMessage(error);
+          set({
+            error: errorMessage ?? "Something went wrong!!",
+            loading: false,
+          });
+        }
+      },
+
+      appendMessage: (message) =>
         set((state) => ({
-          error: null,
-          loading: false,
-          success: response?.message ?? "Success",
-          selectedUserChats: [...state.selectedUserChats, response?.data],
-        }));
-      }
-    } catch (error) {
-      const errorMessage = getAxiosErrorMessage(error);
-      set({
-        error: errorMessage ?? "Something went wrong!!",
-        loading: false,
-      });
+          selectedUserChats: [...state.selectedUserChats, message],
+        })),
+
+      updateAvailableUsers: (user) => {
+        const { availableUsers } = get();
+        if (!availableUsers.find((u) => u._id === user._id)) {
+          set({ availableUsers: [user, ...availableUsers] });
+        }
+      },
+
+      deleteMessage: async (messageId) => {
+        const { loading, selectedUser } = get();
+
+        if (loading) return;
+
+        try {
+          set({ loading: true, error: null, success: null });
+
+          const response = await deleteMessageService(
+            selectedUser?._id,
+            messageId
+          );
+
+          if (response.success) {
+            set((state) => ({
+              error: null,
+              loading: false,
+              success: response?.message ?? "Success",
+              selectedUserChats: state.selectedUserChats.filter(
+                (chat) => chat?._id !== messageId
+              ),
+            }));
+          }
+        } catch (error) {
+          const errorMessage = getAxiosErrorMessage(error);
+          set({
+            error: errorMessage ?? "Something went wrong!!",
+            loading: false,
+          });
+        }
+      },
+    }),
+    {
+      name: "chat-storage",
+      partialize: (state) => ({
+        activeUser: state.activeUser,
+        selectedUser: state.selectedUser,
+        selectedUserChats: state.selectedUserChats,
+      }),
     }
-  },
-
-  appendMessage: (message) =>
-    set((state) => ({
-      selectedUserChats: [...state.selectedUserChats, message],
-    })),
-
-  updateAvailableUsers: (user) => {
-    const { availableUsers } = get();
-    if (!availableUsers.find((u) => u._id === user._id)) {
-      set({ availableUsers: [user, ...availableUsers] });
-    }
-  },
-
-  deleteMessage: async (messageId) => {
-    const { loading, selectedUser } = get();
-
-    if (loading) return;
-
-    try {
-      set({ loading: true, error: null, success: null });
-
-      const response = await deleteMessageService(selectedUser?._id, messageId);
-
-      if (response.success) {
-        set((state) => ({
-          error: null,
-          loading: false,
-          success: response?.message ?? "Success",
-          selectedUserChats: state.selectedUserChats.filter(
-            (chat) => chat?._id !== messageId
-          ),
-        }));
-      }
-    } catch (error) {
-      const errorMessage = getAxiosErrorMessage(error);
-      set({
-        error: errorMessage ?? "Something went wrong!!",
-        loading: false,
-      });
-    }
-  },
-}));
+  )
+);
 
 export default useChatStore;

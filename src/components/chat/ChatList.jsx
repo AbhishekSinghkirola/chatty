@@ -1,4 +1,4 @@
-import { useEffect, useRef, useMemo } from "react";
+import { useMemo } from "react";
 import useChatStore from "../../store/useChatStore";
 import ChatArea from "./ChatArea";
 import useChatActions from "../../hooks/useChatActions";
