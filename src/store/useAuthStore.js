@@ -136,7 +136,6 @@ const useAuthStore = create((set, get) => ({
         useChatStore.persist.clearStorage();
       }
     } catch (error) {
-      console.log(error);
       const errorMessage = getAxiosErrorMessage(error);
       set({
         error: errorMessage ?? "Something went wrong1!!",

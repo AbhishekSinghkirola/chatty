@@ -2,9 +2,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useChatStore from "../../store/useChatStore";
 import { ucFirst } from "../../utils/string";
 import TypingIndicator from "./TypingIndicator";
+import { Button } from "@/components/ui/button";
 
 const ChatHeader = ({ isTyping }) => {
-  const { activeUser } = useChatStore();
+  const { activeUser, deleteOneOnOneChat } = useChatStore();
+
+  const handleDeleteOneOnOneChat = async () => {
+    await deleteOneOnOneChat();
+  };
 
   return (
     <div className="pb-2 flex items-center gap-4 border-b mb-4">
@@ -22,6 +27,13 @@ const ChatHeader = ({ isTyping }) => {
 
         <TypingIndicator isTyping={isTyping} />
       </div>
+
+      <Button
+        className="text-end w-fit ml-auto"
+        onClick={handleDeleteOneOnOneChat}
+      >
+        Clear Chat
+      </Button>
     </div>
   );
 };

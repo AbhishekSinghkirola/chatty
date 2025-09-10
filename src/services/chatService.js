@@ -39,3 +39,10 @@ export const deleteMessageService = async (chatId, messageId) => {
   );
   return response.data;
 };
+
+export const deleteOneOnOneChatService = async (chatId) => {
+  const response = await axiosInstance.delete(
+    `/chat-app/chats/remove/${chatId}`
+  );
+  return response.data;
+};

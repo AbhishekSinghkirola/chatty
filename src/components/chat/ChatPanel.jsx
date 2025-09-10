@@ -9,15 +9,19 @@ import AttachmentsBox from "./AttachmentsBox";
 
 import useTypingStatus from "../../hooks/useTypingStatus";
 import useAttachments from "../../hooks/useAttachments";
+import { useEscapeKey } from "../../hooks/useEscapeKey";
 
 const ChatPanel = () => {
-  const { sendMessage, selectedUser, activeUser } = useChatStore();
+  const { sendMessage, selectedUser, activeUser, resetSelectedUser } =
+    useChatStore();
 
   const [message, setMessage] = useState("");
   const { files, setFiles, handleAttachmentsChange } = useAttachments();
   const { isTyping, startTyping, stopTyping } = useTypingStatus(
     selectedUser?._id
   );
+
+  useEscapeKey(resetSelectedUser);
 
   const handleSendMessage = async () => {
     if (!message.trim()) return;

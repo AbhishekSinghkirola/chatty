@@ -4,6 +4,7 @@ import { persist } from "zustand/middleware";
 import { getAxiosErrorMessage } from "../utils/errorHandling";
 import {
   deleteMessageService,
+  deleteOneOnOneChatService,
   getAllAvailableUsersService,
   getAllMessagesService,
   getLoggedInUserAssociatedChatService,
@@ -202,6 +203,38 @@ const useChatStore = create(
             loading: false,
           });
         }
+      },
+
+      deleteOneOnOneChat: async () => {
+        const { loading, selectedUser } = get();
+
+        if (loading) return;
+
+        try {
+          set({ loading: true, error: null, success: null });
+
+          const response = await deleteOneOnOneChatService(selectedUser?._id);
+
+          if (response.success) {
+            set(() => ({
+              error: null,
+              loading: false,
+              success: response?.message ?? "Success",
+              selectedUserChats: [],
+            }));
+          }
+        } catch (error) {
+          const errorMessage = getAxiosErrorMessage(error);
+          set({
+            error: errorMessage ?? "Something went wrong!!",
+            loading: false,
+          });
+        }
+      },
+
+      resetSelectedUser: () => {
+        set({ selectedUser: null, selectedUserChats: [], activeUser: null });
+        useChatStore.persist.clearStorage();
       },
     }),
     {
