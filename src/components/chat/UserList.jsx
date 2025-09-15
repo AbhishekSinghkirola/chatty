@@ -5,14 +5,18 @@ import useChatStore from "../../store/useChatStore";
 import useChatActions from "../../hooks/useChatActions";
 
 const UserList = () => {
-  const { availableUsers } = useChatStore();
+  const { availableUsers, activeUser } = useChatStore();
   const { startOneOnOneChat } = useChatActions();
-  
+
   return (
-    <section className="w-[25%] h-full flex flex-col min-h-0">
+    <section
+      className={`w-full md:w-[25%] h-full flex flex-col min-h-0 ${
+        activeUser ? "hidden md:flex" : "flex"
+      }`}
+    >
       <div className="flex-1 overflow-y-scroll scrollbar-custom">
         {availableUsers?.length ? (
-          <ul className="flex flex-col gap-4 pr-4">
+          <ul className="flex flex-col gap-4 pr-1 md:pr-4">
             {availableUsers.map((user) => (
               <UserItem
                 key={user._id}

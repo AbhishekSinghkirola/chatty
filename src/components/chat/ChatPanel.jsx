@@ -44,8 +44,8 @@ const ChatPanel = () => {
 
   return (
     <section
-      className={`w-[75%] h-full flex flex-col min-h-0 pl-4 ${
-        activeUser ? "block" : "hidden"
+      className={`w-full md:w-[75%] h-full flex flex-col min-h-0 pl-2 md:pl-4 ${
+        activeUser ? "flex" : "hidden"
       }`}
     >
       <ChatHeader isTyping={isTyping} />

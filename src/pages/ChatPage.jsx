@@ -12,7 +12,7 @@ const ChatPage = () => {
 
   return (
     <section className="w-full h-full flex items-center">
-      <div className="w-full h-[90%] flex glass p-4 min-h-0">
+      <div className="w-full h-[90%] flex glass p-2 md:p-4 min-h-0">
         <UserList />
         <ChatPanel />
       </div>
