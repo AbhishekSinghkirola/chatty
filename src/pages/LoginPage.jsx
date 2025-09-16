@@ -83,13 +83,11 @@ const LoginPage = () => {
             <div className="grid gap-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password">Password</Label>
-                <Link to="/forgot-password">
-                  <Button
-                    variant="link"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline p-0  "
-                  >
-                    Forgot your password?
-                  </Button>
+                <Link
+                  to="/forgot-password"
+                  className="ml-auto inline-block text-sm underline-offset-4 hover:underline p-0  "
+                >
+                  Forgot your password?
                 </Link>
               </div>
               <Input id="password" type="password" {...register("password")} />

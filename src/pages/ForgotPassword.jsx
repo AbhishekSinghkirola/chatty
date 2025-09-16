@@ -70,6 +70,7 @@ const ForgotPassword = () => {
                 id="email"
                 type="email"
                 placeholder="m@example.com"
+                autoFocus="true"
                 {...register("email")}
               />
               {errors.email && (
