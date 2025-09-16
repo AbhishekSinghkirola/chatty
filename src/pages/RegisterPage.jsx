@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 import {
   Card,
@@ -33,6 +33,7 @@ const RegisterPage = () => {
   });
 
   const { registerUser, loading } = useAuthStore();
+  const navigate = useNavigate();
 
   const handleRegister = async (userdata) => {
     await registerUser(userdata);
@@ -41,6 +42,8 @@ const RegisterPage = () => {
 
     if (success) {
       toast.success(success);
+
+      navigate("/login");
 
       reset();
     }

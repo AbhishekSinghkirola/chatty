@@ -25,10 +25,12 @@ const App = () => {
   const { getLoggedInUser, user } = useAuthStore();
   const { initSocket, cleanupSocket } = useSockeStore();
 
+  // Fetch Logged In User on App Load
   useEffect(() => {
     getLoggedInUser();
   }, [getLoggedInUser]);
 
+  // Initialize Socket When User is Authenticated
   useEffect(() => {
     if (user) {
       initSocket();
