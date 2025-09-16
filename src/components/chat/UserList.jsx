@@ -3,6 +3,7 @@ import UserItem from "./UserItem";
 import useChatStore from "../../store/useChatStore";
 
 import useChatActions from "../../hooks/useChatActions";
+import UserListHeader from "./UserListHeader";
 
 const UserList = () => {
   const { availableUsers, activeUser } = useChatStore();
@@ -14,6 +15,7 @@ const UserList = () => {
         activeUser ? "hidden md:flex" : "flex"
       }`}
     >
+      <UserListHeader />
       <div className="flex-1 overflow-y-scroll scrollbar-custom">
         {availableUsers?.length ? (
           <ul className="flex flex-col gap-4 pr-1 md:pr-4">
