@@ -16,6 +16,7 @@ const UserList = () => {
       }`}
     >
       <UserListHeader />
+
       <div className="flex-1 overflow-y-scroll scrollbar-custom">
         {availableUsers?.length ? (
           <ul className="flex flex-col gap-4 pr-1 md:pr-4">

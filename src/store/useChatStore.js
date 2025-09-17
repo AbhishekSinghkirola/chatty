@@ -161,10 +161,11 @@ const useChatStore = create(
         }
       },
 
-      appendMessage: (message) =>
+      appendMessage: (message) => {
         set((state) => ({
           selectedUserChats: [...state.selectedUserChats, message],
-        })),
+        }));
+      },
 
       updateAvailableUsers: (user) => {
         const { availableUsers } = get();
