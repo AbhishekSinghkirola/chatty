@@ -10,7 +10,6 @@ const ChatAttachment = ({ attachment, className, onClick }) => {
       <CardContent className="p-0 flex justify-between items-center">
         <div className="flex items-center gap-3 pr-4 min-w-0 flex-1">
           <File className="flex-shrink-0 w-6 h-6" />{" "}
-          {/* ✅ fixed size, no shrinking */}
           <div className="flex flex-col min-w-0">
             <p className="truncate">
               {attachment?.localPath?.split("/").pop() || "file"}
