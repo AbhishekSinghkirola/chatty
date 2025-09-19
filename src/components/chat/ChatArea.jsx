@@ -28,7 +28,12 @@ const ChatArea = ({ chat, onDelete }) => {
                 key={attachment?.url || filename}
                 className={isCurrentUser ? "ml-auto" : ""}
                 attachment={attachment}
-                onClick={() => downloadFile(attachment?.url || "", filename)}
+                onClick={() =>
+                  downloadFile(
+                    attachment?.url?.replace(/^http:\/\//i, "https://") || "",
+                    filename
+                  )
+                }
               />
             );
           })}
