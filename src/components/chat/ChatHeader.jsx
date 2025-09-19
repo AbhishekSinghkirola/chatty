@@ -37,7 +37,7 @@ const ChatHeader = ({ isTyping }) => {
       </div>
 
       <div className="flex flex-col">
-        <span className="text-lg md:text-xl font-medium">
+        <span className="text-lg md:text-xl font-medium truncate max-w-[150px] md:max-w-[250px]">
           {ucFirst(activeUser?.username ?? "Unknown")}
         </span>
 

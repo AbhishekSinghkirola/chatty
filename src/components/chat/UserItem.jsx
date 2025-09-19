@@ -17,7 +17,7 @@ const UserItem = ({ user = {}, onClick }) => {
           alt={`${displayName}'s avatar`}
           className="size-10 rounded-full object-cover"
         />
-        <span className="text-xl">{displayName}</span>
+        <span className="text-xl truncate">{displayName}</span>
       </button>
     </li>
   );
