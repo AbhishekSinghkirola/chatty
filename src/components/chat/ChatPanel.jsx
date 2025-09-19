@@ -10,6 +10,7 @@ import AttachmentsBox from "./AttachmentsBox";
 import useTypingStatus from "../../hooks/useTypingStatus";
 import useAttachments from "../../hooks/useAttachments";
 import { useEscapeKey } from "../../hooks/useEscapeKey";
+import { toast } from "sonner";
 
 const ChatPanel = () => {
   const { sendMessage, selectedUser, activeUser, resetSelectedUser } =
@@ -31,6 +32,12 @@ const ChatPanel = () => {
     formData.append("content", message);
 
     await sendMessage(formData);
+
+    const { error } = useChatStore.getState();
+
+    if (error) {
+      toast.error(error);
+    }
 
     setMessage("");
     setFiles([]);
