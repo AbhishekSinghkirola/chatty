@@ -12,10 +12,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const ChatHeader = ({ isTyping }) => {
-  const { activeUser, deleteOneOnOneChat, resetSelectedUser } = useChatStore();
+  const {
+    activeUser,
+    deleteOneOnOneChat,
+    resetSelectedUser,
+    initiateOneOnOneChat,
+  } = useChatStore();
 
   const handleDeleteOneOnOneChat = async () => {
     await deleteOneOnOneChat();
+
+    await initiateOneOnOneChat(activeUser);
   };
 
   return (
