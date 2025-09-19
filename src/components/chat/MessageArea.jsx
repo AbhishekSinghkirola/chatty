@@ -31,7 +31,7 @@ const MessageArea = ({
           className="hidden"
           type="file"
           multiple
-          accept=".jpg,.png,.pdf"
+          accept="image/*"
           onChange={handleAttachmentsChange}
         />
       </Label>
